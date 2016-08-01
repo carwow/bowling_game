@@ -1,0 +1,2 @@
+defmodule BowlingKata do
+end
