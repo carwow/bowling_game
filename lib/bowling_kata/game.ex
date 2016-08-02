@@ -26,6 +26,7 @@ defmodule BowlingKata.Game do
   end
 
   defp strike_bonus([x | [y | _]]), do: x + y
+  defp strike_bonus([x]), do: x
   defp strike_bonus([]), do: 0
 
   defp spare_bonus(10, [head | _]), do: head
