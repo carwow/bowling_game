@@ -6,39 +6,28 @@ defmodule BowlingKata.Game do
   end
 
   def score(game) do
-    calculate_score(Enum.reverse(game.rolls), 1)
+    frame_score(Enum.reverse(game.rolls), 1)
   end
 
-  def strike_bonus([x | [y | _]]) do
-    x + y
-  end
-
-  def strike_bonus([]) do
+  defp frame_score([], _) do 
     0
   end
 
-  def calculate_score([10 | tail], 10) do
+  defp frame_score([10 | tail], 10) do
     10 + strike_bonus(tail)
   end
 
-  def calculate_score([10 | tail], frame_number) do
-    10 + strike_bonus(tail) + calculate_score(tail, frame_number + 1)
+  defp frame_score([10 | tail], frame_number) do
+    10 + strike_bonus(tail) + frame_score(tail, frame_number + 1)
   end
 
-  def calculate_score([], _) do
-    0
+  defp frame_score([a | [b | tail]], frame_number) do
+    a + b + spare_bonus(a + b, tail) + frame_score(tail, frame_number + 1)
   end
 
-  def calculate_score([a | [b | tail]], frame_number) do
-    frame_score = a + b
-    frame_score + spare_bonus(frame_score, tail) + calculate_score(tail, frame_number + 1)
-  end
+  defp strike_bonus([x | [y | _]]), do: x + y
+  defp strike_bonus([]), do: 0
 
-  def spare_bonus(10, [head | _]) do
-    head
-  end
-
-  def spare_bonus(_, _) do
-    0
-  end
+  defp spare_bonus(10, [head | _]), do: head
+  defp spare_bonus(_, _), do: 0
 end
