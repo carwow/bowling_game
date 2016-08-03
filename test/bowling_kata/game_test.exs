@@ -32,7 +32,7 @@ defmodule BowlingKata.GameTest do
 
   test "perfect game" do
     game = %Game{}
-    |> run_many(20, 10)
+    |> run_many(12, 10)
 
     assert Game.score(game) == 300
   end
