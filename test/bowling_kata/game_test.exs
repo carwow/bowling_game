@@ -32,10 +32,19 @@ defmodule BowlingKata.GameTest do
 
   test "perfect game" do
     game = %Game{}
-    |> run_many(20, 10)
+    |> run_many(12, 10)
 
     assert Game.score(game) == 300
   end
+
+  test "last frame only one strike" do
+    game = %Game{}
+    |> run_many(18, 0)
+    |> run_rolls([10, 1])
+
+    assert Game.score(game) == 11
+  end
+
 
   def run_many(game, n, value) do
     rolls = Enum.map(1..n, fn _ -> value end)
