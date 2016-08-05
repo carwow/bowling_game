@@ -17,8 +17,8 @@ defmodule BowlingKata.Game do
     10 + strike_bonus(tail)
   end
 
-  def calculate_score([10 | tail], frame, acc) do
-     calculate_score(tail, frame + 1, acc + 10 + strike_bonus(tail))
+  def calculate_score([10 | tail], frame) do
+      10 + strike_bonus(tail) + calculate_score(tail, frame + 1)
   end
 
 
@@ -31,15 +31,8 @@ defmodule BowlingKata.Game do
     sum + spare_bonus(sum, tail) + calculate_score(tail, frame + 1)
   end
 
-  def strike_bonus([x | [y | tail]]) do
-    x + y
-  end
+  def strike_bonus([x | [y | _]]), do: x + y
 
-  def spare_bonus(10, [x | tail]) do
-    x
-  end
-
-  def spare_bonus(_, _) do
-    0
-  end
+  def spare_bonus(10, [x | _]), do: x
+  def spare_bonus(_, _), do: 0
 end
