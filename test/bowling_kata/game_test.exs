@@ -37,6 +37,22 @@ defmodule BowlingKata.GameTest do
     assert Game.score(game) == 300
   end
 
+  test "bad game with a final spare" do
+    game = %Game{}
+    |> run_many(18, 0)
+    |> run_rolls([9, 1, 3])
+
+    assert Game.score(game) == 13
+  end
+
+  test "bad game with a final spare plus a strike" do
+    game = %Game{}
+    |> run_many(18, 0)
+    |> run_rolls([9, 1, 10])
+
+    assert Game.score(game) == 20
+  end
+
   def run_many(game, n, value) do
     rolls = Enum.map(1..n, fn _ -> value end)
     run_rolls(game, rolls)
