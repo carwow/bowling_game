@@ -32,9 +32,25 @@ defmodule BowlingKata.GameTest do
 
   test "perfect game" do
     game = %Game{}
-    |> run_many(20, 10)
+    |> run_many(12, 10)
 
     assert Game.score(game) == 300
+  end
+
+  test "game with a final spare" do
+    game = %Game{}
+    |> run_many(18, 0)
+    |> run_rolls([9, 1, 3])
+
+    assert Game.score(game) == 13
+  end
+
+  test "game with a final spare 1" do
+    game = %Game{}
+    |> run_many(18, 0)
+    |> run_rolls([9, 1, 10])
+
+    assert Game.score(game) == 20
   end
 
   def run_many(game, n, value) do
