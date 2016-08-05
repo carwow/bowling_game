@@ -22,6 +22,11 @@ defmodule BowlingKata.Game do
      calculate_score(tail, frame_number + 1, accumulated_score)
   end
 
+  defp calculate_score([a | [b | tail]], 10, accumulator) do
+     accumulator + a + b + spare_bonus(a + b, tail)
+  end
+
+
   defp calculate_score([a | [b | tail]], frame_number, accumulator) do
      accumulated_score = accumulator + a + b + spare_bonus(a + b, tail)
      calculate_score(tail, frame_number + 1, accumulated_score)
