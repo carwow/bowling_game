@@ -6,30 +6,31 @@ defmodule BowlingKata.Game do
   end
 
   def score(game) do
-    calculate_score(Enum.reverse(game.rolls), 1, 0)
+    calculate_score(Enum.reverse(game.rolls), frame_number: 1)
   end
 
-  defp calculate_score([], _, accumulator) do 
-    accumulator
+  defp calculate_score([], frame_number: _) do
+    0
   end
 
-  defp calculate_score([10 | tail], 10, accumulator) do
-    accumulator + 10 + strike_bonus(tail)
+  defp calculate_score(rolls, frame_number: 10) do
+    {score, _} = calculate_frame_score(rolls)
+    score
   end
 
-  defp calculate_score([10 | tail], frame_number, accumulator) do
-     accumulated_score = accumulator + 10 + strike_bonus(tail)
-     calculate_score(tail, frame_number + 1, accumulated_score)
+  defp calculate_score(rolls, frame_number: number) do
+    {score, remaining_rolls} = calculate_frame_score(rolls)
+    score + calculate_score(remaining_rolls, frame_number: number + 1)
   end
 
-  defp calculate_score([a | [b | tail]], 10, accumulator) do
-     accumulator + a + b + spare_bonus(a + b, tail)
+  defp calculate_frame_score([10 | tail]) do
+    frame_score = 10 + strike_bonus(tail)
+    {frame_score, tail}
   end
 
-
-  defp calculate_score([a | [b | tail]], frame_number, accumulator) do
-     accumulated_score = accumulator + a + b + spare_bonus(a + b, tail)
-     calculate_score(tail, frame_number + 1, accumulated_score)
+  defp calculate_frame_score([first_roll | [second_roll | tail]]) do
+    frame_score = first_roll + second_roll + spare_bonus(first_roll + second_roll, tail)
+    {frame_score, tail}
   end
 
   defp strike_bonus([x | [y | _]]), do: x + y
