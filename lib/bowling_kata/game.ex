@@ -14,24 +14,25 @@ defmodule BowlingKata.Game do
   end
 
   defp game_score(rolls, frame_number: 10, current_score: score) do
-    {frame_score, _} = frame_score(rolls)
-    score + frame_score
+    score + frame_score(rolls)
   end
 
   defp game_score(rolls, frame_number: number, current_score: score) do
-    {frame_score, remaining_rolls} = frame_score(rolls)
-    game_score(remaining_rolls, frame_number: number + 1, current_score: score + frame_score)
+    game_score(next_frame(rolls), 
+               frame_number: number + 1, 
+               current_score: score + frame_score(rolls))
   end
 
   defp frame_score([10 | tail]) do
-    frame_score = 10 + strike_bonus(tail)
-    {frame_score, tail}
+    10 + strike_bonus(tail)
   end
 
   defp frame_score([first_roll | [second_roll | tail]]) do
-    frame_score = first_roll + second_roll + spare_bonus(first_roll + second_roll, tail)
-    {frame_score, tail}
+    first_roll + second_roll + spare_bonus(first_roll + second_roll, tail)
   end
+
+  defp next_frame([10 | tail]), do: tail
+  defp next_frame([_ | [_ | tail]]), do: tail
 
   defp strike_bonus([x | [y | _]]), do: x + y
   defp strike_bonus([x]), do: x
